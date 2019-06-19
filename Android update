@@ -1,0 +1,116 @@
+
+package com.kfc.julianalmanza.kfc;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    ImageView imagen_bigbox,Imagen_bigbox_recargado,imagen_combo_economico,imagen_megapop;
+    Button izquierda,derecha;
+    String nombre,contraseña,correo;
+    TextView usuario_main;
+    LinearLayout line;
+    int imag;
+
+    private int[] imagenes={
+            R.drawable.kfc_bigbox,
+            R.drawable.kfc_bigbox_recargado,
+            R.drawable.kfc_combo_economico,
+            R.drawable.kfc_mega_pop,
+
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mainactivity);
+
+        usuario_main=(TextView) findViewById(R.id.usuario_main);
+        Bundle extra =getIntent().getExtras();
+        String texto=getString(R.string.user);
+        texto=texto+"\n"+extra.getString("nombre");
+        usuario_main.setText(texto);
+        nombre=extra.getString("nombre");
+        contraseña=extra.getString("contraseña");
+        correo=extra.getString("correo");
+
+        izquierda=(Button) findViewById(R.id.izquierda);
+        derecha=(Button) findViewById(R.id.derecha);
+        line=(LinearLayout) findViewById(R.id.promo);
+        imag=0;
+
+        izquierda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imag==0){
+                    imag=3;
+                    line.setBackground(getResources().getDrawable(imagenes[imag]));
+                }else {
+                    imag=imag-1;
+                    line.setBackground(getResources().getDrawable(imagenes[imag]));
+                }
+            }
+        });
+
+        derecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imag==3){
+                    imag=0;
+                    line.setBackground(getResources().getDrawable(imagenes[imag]));
+                }else {
+                    imag=imag+1;
+                    line.setBackground(getResources().getDrawable(imagenes[imag]));
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        switch (id){
+            case(R.id.Miperfil):
+
+                Intent intent= new Intent(this,Miperfil.class);
+                intent.putExtra("nombre",nombre);
+                intent.putExtra("contraseña",contraseña);
+                intent.putExtra("correo",correo);
+                startActivity(intent);
+                break;
+            case(R.id.MainActivity):
+                break;
+            case(R.id.Productos):
+                Intent intent2= new Intent(this,Productos.class);
+                intent2.putExtra("nombre",nombre);
+                intent2.putExtra("contraseña",contraseña);
+                intent2.putExtra("correo",correo);
+                startActivity(intent2);
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+}
